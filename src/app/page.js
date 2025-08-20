@@ -1,7 +1,5 @@
+import Users from './components/users';
+
 export default function Home() {
-    return (
-        <div>
-            <main></main>
-        </div>
-    );
+    return <Users />;
 }
