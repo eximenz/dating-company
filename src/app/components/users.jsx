@@ -5,11 +5,11 @@ import { paginate } from '../utils/paginate';
 import GroupList from './groupList';
 import api from '../api';
 
-const Users = ({ users, ...rest }) => {
+const Users = ({ users: allUsers, ...rest }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
-    const count = users.length;
+    const count = allUsers.length;
     const pageSize = 4;
 
     useEffect(() => {
@@ -23,8 +23,10 @@ const Users = ({ users, ...rest }) => {
     const handlePageChange = pageIndex => {
         setCurrentPage(pageIndex);
     };
-
-    const userCrop = paginate(users, currentPage, pageSize);
+    const filtredUsers = selectedProf
+        ? allUsers.filter(user => user.profession === selectedProf)
+        : allUsers;
+    const userCrop = paginate(filtredUsers, currentPage, pageSize);
     return (
         <>
             {professions && (
