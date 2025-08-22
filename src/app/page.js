@@ -1,10 +1,14 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import api from './api';
 import Users from './components/users';
 
 const App = () => {
-    const [users, setUsers] = useState(api.users.fetchAll());
+    const [users, setUsers] = useState();
+
+    useEffect(() => {
+        api.users.fetchAll().then(data => setUsers(data));
+    });
 
     const handleDelete = userId => setUsers(users.filter(user => user._id !== userId));
 
@@ -19,7 +23,17 @@ const App = () => {
         );
     };
 
-    return <Users onDelete={handleDelete} onToggleBookMark={handleToggleBookMark} users={users} />;
+    return (
+        <>
+            {users && (
+                <Users
+                    onDelete={handleDelete}
+                    onToggleBookMark={handleToggleBookMark}
+                    users={users}
+                />
+            )}
+        </>
+    );
 };
 
 export default App;
