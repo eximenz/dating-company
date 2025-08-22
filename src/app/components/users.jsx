@@ -4,12 +4,12 @@ import User from './user';
 import { paginate } from '../utils/paginate';
 import GroupList from './groupList';
 import api from '../api';
+import SearchStatus from './searchStatus';
 
 const Users = ({ users: allUsers, ...rest }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
-    const count = allUsers.length;
     const pageSize = 4;
 
     useEffect(() => {
@@ -27,14 +27,17 @@ const Users = ({ users: allUsers, ...rest }) => {
         ? allUsers.filter(user => user.profession === selectedProf)
         : allUsers;
 
+    const count = filtredUsers.length;
+
     const userCrop = paginate(filtredUsers, currentPage, pageSize);
 
     const clearFilter = () => {
         setSelectedProf();
     };
-    
+
     return (
         <>
+            <SearchStatus length={count} />
             {professions && (
                 <>
                     <GroupList
