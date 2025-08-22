@@ -26,17 +26,28 @@ const Users = ({ users: allUsers, ...rest }) => {
     const filtredUsers = selectedProf
         ? allUsers.filter(user => user.profession === selectedProf)
         : allUsers;
+
     const userCrop = paginate(filtredUsers, currentPage, pageSize);
+
+    const clearFilter = () => {
+        setSelectedProf();
+    };
+    
     return (
         <>
             {professions && (
-                <GroupList
-                    selectedItem={selectedProf}
-                    items={professions}
-                    onItemSelect={handleProfessionSelect}
-                    valueProperty="_id"
-                    contentProperty="name"
-                />
+                <>
+                    <GroupList
+                        selectedItem={selectedProf}
+                        items={professions}
+                        onItemSelect={handleProfessionSelect}
+                        valueProperty="_id"
+                        contentProperty="name"
+                    />
+                    <button className="btn btn-secondary m-2" onClick={() => clearFilter()}>
+                        Очистить
+                    </button>
+                </>
             )}
             {count > 0 && (
                 <table className="table">
