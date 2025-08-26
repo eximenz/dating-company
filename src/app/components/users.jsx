@@ -5,12 +5,14 @@ import GroupList from './groupList';
 import api from '../api';
 import SearchStatus from './searchStatus';
 import UsersTable from './usersTable';
+import _ from 'lodash';
 
 const Users = ({ users: allUsers, ...rest }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
-    const pageSize = 2;
+    const [sortBy, setSortBy] = useState({ iter: 'name', order: 'asc' });
+    const pageSize = 8;
 
     useEffect(() => {
         api.professions.fetchAll().then(data => setProfessions(data));
@@ -25,7 +27,14 @@ const Users = ({ users: allUsers, ...rest }) => {
     };
 
     const handleSort = item => {
-        console.log(item);
+        if (sortBy.iter === item) {
+            setSortBy(prevState => ({
+                ...prevState,
+                order: prevState.order === 'asc' ? 'desc' : 'asc',
+            }));
+        } else {
+            setSortBy({ iter: item, order: 'asc' });
+        }
     };
 
     const handlePageChange = pageIndex => {
@@ -37,7 +46,9 @@ const Users = ({ users: allUsers, ...rest }) => {
 
     const count = filteredUsers.length;
 
-    const userCrop = paginate(filteredUsers, currentPage, pageSize);
+    const sortedUsers = _.orderBy(filteredUsers, [sortBy.iter], [sortBy.order]);
+
+    const userCrop = paginate(sortedUsers, currentPage, pageSize);
 
     const clearFilter = () => {
         setSelectedProf();
