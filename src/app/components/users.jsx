@@ -24,6 +24,10 @@ const Users = ({ users: allUsers, ...rest }) => {
         setSelectedProf(item);
     };
 
+    const handleSort = item => {
+        console.log(item);
+    };
+
     const handlePageChange = pageIndex => {
         setCurrentPage(pageIndex);
     };
@@ -57,9 +61,7 @@ const Users = ({ users: allUsers, ...rest }) => {
             )}
             <div className="d-flex flex-column">
                 <SearchStatus length={count} />
-                {count > 0 && (
-                    <UsersTable users={userCrop} {...rest}/>
-                )}
+                {count > 0 && <UsersTable users={userCrop} onSort={handleSort} {...rest} />}
                 <div className="d-flex justify-content-center">
                     <Pagination
                         itemsCount={count}
